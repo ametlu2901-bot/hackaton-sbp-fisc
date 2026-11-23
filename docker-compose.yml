@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-sonnet-5-5}
+      - FRONTEND_ORIGIN=http://localhost:3000
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+        NEXT_PUBLIC_TITULO: ${NEXT_PUBLIC_TITULO:-Dashboard de datos}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
